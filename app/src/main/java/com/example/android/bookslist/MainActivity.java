@@ -1,18 +1,22 @@
 package com.example.android.bookslist;
 
-import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.app.LoaderManager;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Created by phartmann on 16/02/2018.
+ */
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<BookList>> {
 
@@ -34,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         boolean isConnected = networkInfo != null && networkInfo.isConnectedOrConnecting();
 
         /** Create new BookAdapter to this Activity */
-        bookAdapter = new BookAdapter(this, new ArrayList <BookList>());
+        bookAdapter = new BookAdapter(this, new ArrayList<BookList>());
 
         /** Find view and set adapter */
         ListView listView = (ListView) findViewById(R.id.list);
@@ -55,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     /** Call the Loader passing a List */
     @Override
-    public Loader<List <BookList>> onCreateLoader( int id, Bundle bundle ) {
+    public Loader<List <BookList>> onCreateLoader( int id, Bundle args ) {
         Log.i(LOG_TAG, "onCreateLoader executed X5S" );
         return new BookLoader(this, QueryBooks.urlAPI);
     }
@@ -70,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (bookdata != null && !bookdata.isEmpty()){
             bookAdapter.addAll(bookdata);
             Log.i(LOG_TAG, "onLoadFinished executed X5S" );
-
         }
         Log.i(LOG_TAG, "onLoadFinished NOT executed X5S" );
     }
@@ -80,6 +83,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoaderReset( Loader <List <BookList>> loader ) {
         bookAdapter.clear();
         Log.i(LOG_TAG, "onLoaderReset executed X5S" );
-
     }
 }
