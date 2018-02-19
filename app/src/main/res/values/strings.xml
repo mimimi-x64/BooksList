@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Books List</string>
+    <string name="blank_url">Digite um livro na barra de pesquisa para começar</string>
 </resources>

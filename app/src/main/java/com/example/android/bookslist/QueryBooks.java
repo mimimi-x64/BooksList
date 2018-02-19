@@ -29,7 +29,7 @@ public class QueryBooks {
 
     public static final String LOG_TAG = QueryBooks.class.getSimpleName();
     public static final String urlAPI =
-            "https://www.googleapis.com/books/v1/volumes?q=android+studio&maxResults=1";
+            "https://www.googleapis.com/books/v1/volumes?q=android+studio&maxResults=20";
 
     public static List<BookList> fetchBooksData(String requestUrl){
 
@@ -146,24 +146,29 @@ public class QueryBooks {
             for (int i=0; i < itemsArray.length(); i++ ){
                 JSONObject index = itemsArray.getJSONObject(i);
                 JSONObject volumeInfo = index.getJSONObject("volumeInfo");
-                JSONArray authorsArray = volumeInfo.getJSONArray("authors");
-
-                /** Check if has more than 1 author and handle it */
-                if (authorsArray.length() != 0){
-                    author = "Vários Autores";
-                } else {
-                    author = authorsArray.getString(0);
-                }
+                /** Catch title */
                 title = volumeInfo.getString("title");
+
+                if (volumeInfo.has("authors")){
+                    JSONArray authorsArray = volumeInfo.getJSONArray("authors");
+                    /** Check if has more than 1 author and handle it */
+                    if (authorsArray.length() != 1){
+                        author = "Vários Autores";
+                    } else {
+                        author = authorsArray.getString(0);
+                    }
+                } else {
+                    author = "Autor não informado";
+                }
+                /** Start to fill */
+                books.add(new BookList(author, title));
             }
         } catch (JSONException e) {
             e.printStackTrace( );
             Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
 
         }
-        /** Start to fill */
-        books.add(new BookList(author, title));
-        Log.i(" ## ## ## TESTAPP: ", title + " "+ author);
+        Log.v(LOG_TAG, "extractFromResponse executed + json: " + jsonResponse);
 
         /** Return the list */
         return books;

@@ -39,7 +39,7 @@ public class BookLoader extends AsyncTaskLoader<List<BookList>> {
     }
 
     @Override
-    protected void onForceLoad() {
+    protected void onStartLoading() {
         Log.i(LOG_TAG, "onForceLoad executed X5S" );
         onForceLoad( );
     }
