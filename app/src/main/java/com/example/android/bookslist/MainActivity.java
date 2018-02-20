@@ -36,20 +36,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private TextView noConnection;
     private ImageView searchIcon;
     private TextView searchTextHint;
-
+    private ConnectivityManager connectivityManager;
+    private NetworkInfo networkInfo;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        /** Call Connectivity Manager */
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        /** Get connection status */
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        boolean isConnected = networkInfo != null && networkInfo.isConnectedOrConnecting();
 
         /** Create new BookAdapter to this Activity */
         bookAdapter = new BookAdapter(this, new ArrayList<BookList>());
@@ -69,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         /** Interact with loader if isConnected */
         loaderManager = getLoaderManager();
 
-        if (isConnected) {
+        /** Get connection status */
+        if (isConnected()) {
             loaderManager.initLoader(LOADER_ID, null, this);
             searchTextHint.setVisibility(View.VISIBLE);
             searchIcon.setVisibility(View.VISIBLE);
@@ -95,6 +89,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Log.i(LOG_TAG, "onCreate executed X5S" );
     }
 
+    private boolean isConnected() {
+        /** Call Connectivity Manager */
+        connectivityManager =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        /** Get connection status */
+        networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    }
+
     /** Hide after onButtonClick to be called */
     public void hideSoftKeyboard() {
         if(getCurrentFocus()!=null) {
@@ -105,21 +110,30 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     /** When button is clicked */
     private void onButtonClick(){
-        String stringSearch = String.valueOf(searchText.getText());
-        if (stringSearch.isEmpty()){
-            Toast.makeText(this, "Por favor, Informe algum livro", Toast.LENGTH_LONG).show();
-            return;
-        } else if (stringSearch.contains(" ")){
-            String stringQuery = stringSearch.replace(" ", "+");
-            String stringQueryFinal = "https://www.googleapis.com/books/v1/volumes?q=" + stringQuery + "&maxResults=20";
-            urlSearch = stringQueryFinal;
-        } else {
-            String stringQueryFinal = "https://www.googleapis.com/books/v1/volumes?q=" + stringSearch + "&maxResults=20";
-            urlSearch = stringQueryFinal;
+
+        /** Check if device is connected */
+        if (isConnected()){
+
+            /** In positive case, do the query */
+            String stringSearch = String.valueOf(searchText.getText());
+            if (stringSearch.isEmpty()){
+                Toast.makeText(this, "Por favor, Informe algum livro", Toast.LENGTH_LONG).show();
+                return;
+            } else if (stringSearch.contains(" ")){
+                String stringQuery = stringSearch.replace(" ", "+");
+                String stringQueryFinal = "https://www.googleapis.com/books/v1/volumes?q=" + stringQuery + "&maxResults=20";
+                urlSearch = stringQueryFinal;
+            } else {
+                String stringQueryFinal = "https://www.googleapis.com/books/v1/volumes?q=" + stringSearch + "&maxResults=20";
+                urlSearch = stringQueryFinal;
+            }
+            loaderManager.restartLoader(LOADER_ID, null, this);
+            hideSoftKeyboard();
+            Log.v(LOG_TAG, "asd123 " + urlSearch);
+        } else{
+            /** If not connected, tell to the user */
+            Toast.makeText(this, "Verifique sua conexão", Toast.LENGTH_SHORT ).show();
         }
-        loaderManager.restartLoader(LOADER_ID, null, this);
-        hideSoftKeyboard();
-        Log.v(LOG_TAG, "asd123 " + urlSearch);
     }
 
     /** Call the Loader passing a List */

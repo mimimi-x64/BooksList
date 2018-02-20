@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="8dp"
+    android:layout_marginHorizontal="@dimen/marginHoriz"
     android:orientation="vertical">
 
     <LinearLayout
@@ -15,14 +15,14 @@
             android:id="@+id/pesquisa_view"
             android:inputType="textCapWords"
             android:hint="Pesquisar"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/zeroWidth"
             android:layout_height="wrap_content"
             android:layout_weight="3"/>
 
         <ImageButton
             android:id="@+id/pesquisa_button"
             android:src="@android:drawable/ic_menu_search"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="@dimen/marginLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -42,8 +42,8 @@
         <ImageView
             android:id="@+id/search_icon"
             android:src="@android:drawable/ic_menu_search"
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
+            android:layout_width="@dimen/layoutWidth"
+            android:layout_height="@dimen/layoutHeight" />
 
         <TextView
             android:id="@+id/blank_url"

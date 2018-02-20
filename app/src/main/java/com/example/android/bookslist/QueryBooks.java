@@ -28,8 +28,9 @@ import javax.net.ssl.HttpsURLConnection;
 public class QueryBooks {
 
     public static final String LOG_TAG = QueryBooks.class.getSimpleName();
-    public static final String urlAPI =
-            "https://www.googleapis.com/books/v1/volumes?q=android+studio&maxResults=20";
+
+    public static String author;
+    public static String title;
 
     public static List<BookList> fetchBooksData(String requestUrl){
 
@@ -49,7 +50,6 @@ public class QueryBooks {
         Log.i(LOG_TAG, "fetchBook Before RETURN executed X5S" );
         return QueryBooks.extractFromResponse(jsonResponse);
     }
-
 
     private static URL createUrl(String stringUrl){
         URL url;
@@ -124,8 +124,7 @@ public class QueryBooks {
 
     private static ArrayList<BookList> extractFromResponse( String jsonResponse ) {
 
-        String author = "";
-        String title = "";
+
 
         /** If response is null, do nothing */
         if (TextUtils.isEmpty(jsonResponse)){
@@ -174,27 +173,3 @@ public class QueryBooks {
         return books;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
