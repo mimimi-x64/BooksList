@@ -17,7 +17,7 @@ public class BookLoader extends AsyncTaskLoader<List<BookList>> {
     /** URL da busca */
     private String mUrl;
 
-    /** Build a constructor, passing contexta and url */
+    /** Build a constructor, passing context and url */
     public BookLoader( Context context, String url ) {
         super(context);
         mUrl = url;
